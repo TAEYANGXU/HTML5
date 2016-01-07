@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>时钟</title>
+    <style>
+        canvas {
+
+            background:#eee;
+        }
+    </style>
+    <script>
+
+        window.onload = function () {
+
+            var myCanvas = document.getElementById("myCanvas")
+            var context = myCanvas.getContext("2d")
+
+            //半径
+            var R = 100;
+            //圆点
+            var startX = 250;
+            var startY = 250;
+
+            //定时器
+            setInterval(function () {
+
+                //清空画布
+                context.clearRect(0,0,500,500)
+
+                //阴影
+                context.shadowColor = "#888"
+                context.shadowOffsetX = 1;
+                context.shadowOffsetY = 1;
+                context.shadowBlur = 3; //模糊
+
+                //渐变
+                var col = context.createRadialGradient(startX,startY,100,startX,startY,50)
+                col.addColorStop(0,"#efefef")
+                col.addColorStop(1,"#cecece")
+
+                context.lineWidth  = 8
+
+                context.beginPath()
+
+                context.strokeStyle=col
+                context.arc(startX,startY,R,2*Math.PI,0,false)
+                context.stroke();
+
+                context.fillStyle = col
+                context.fill()
+
+                context.shadowColor = "#888"
+                context.shadowOffsetX = 0;
+                context.shadowOffsetY = 0;
+                context.shadowBlur = 0; //模糊
+
+                //画刻度
+                drawMark(context,startX,startY,R)
+
+                var date = new Date();
+
+                var ha = date.getHours()*30+(date.getMinutes()*6/12)-90
+                var ma = date.getMinutes()*6-90
+                var sa = date.getSeconds()*6-90
+
+                //画时针
+                drawPointer(context,startX,startY,40,4,ha,"#000")
+                //画分钟
+                drawPointer(context,startX,startY,65,4,ma,"#888")
+                //画秒钟
+                drawPointer(context,startX,startY,75,4,sa,"#ff0000")
+
+                //小圆
+                context.shadowColor="#888";
+                context.shadowOffsetX=1;
+                context.shadowOffsetY=1;
+                context.shadowBlur=3;
+                context.fillStyle="#aaa";
+                context.beginPath();
+                context.arc(startX,startY,4,0,2*Math.PI);
+                context.fill();
+
+
+
+            },1000)
+
+        }
+        //画刻度
+        function drawMark(context,startX,startY,R){
+
+            for(var i=0;i<60;i++){
+
+                if(i%5==0){
+                    var R1 = R - 9
+                    context.lineWidth = 3;
+                }else{
+                    var R1 = R - 6
+                    context.lineWidth = 2;
+                }
+
+                context.beginPath();
+
+                context.strokeStyle = "#888"
+                context.moveTo(startX+Math.cos(i*6*Math.PI/180)*R,startY+Math.sin(i*6*Math.PI/180)*R)
+                context.lineTo(startX+Math.cos(i*6*Math.PI/180)*R1,startY+Math.sin(i*6*Math.PI/180)*R1)
+                context.stroke()
+
+
+            }
+
+
+        }
+
+        //画针
+        function drawPointer(context,startX,startY,R,width,arc,color){
+
+            context.beginPath()
+            context.lineWidth = width
+            context.strokeStyle = color
+            context.moveTo(startX,startY)
+            context.lineTo(startX+R*Math.cos(arc*Math.PI/180),startY+R*Math.sin(arc*Math.PI/180))
+            context.stroke()
+        }
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+</body>
+</html>
