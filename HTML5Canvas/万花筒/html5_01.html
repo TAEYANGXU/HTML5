@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>万花筒</title>
+    <style>
+        canvas{
+
+            background: aliceblue;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+
+            var myCanvas = document.getElementById("myCanvas")
+            var context = myCanvas.getContext("2d")
+
+            var array = []
+
+            setInterval(function () {
+
+                context.clearRect(0,0,600,600)
+                for (var i=0;i<array.length;i++){
+
+                    context.save()
+                    context.translate(300,300)
+                    context.rotate(array[i].angle*Math.PI/180)
+                    context.fillStyle = array[i].color
+                    context.scale(array[i].scales,array[i].scales)
+                    context.fillRect(array[i].num,array[i].num,20,20)
+                    context.restore()
+                }
+
+
+            },100)
+
+            setInterval(function () {
+
+                for (var i=0;i<array.length;i++){
+                    if(array[i].num<=0){
+                        array.splice(i,1)
+                        continue
+                    }
+                    array[i].angle +=2;
+                    array[i].num-=0.2;
+                    array[i].scales-=0.002
+                    if(array[i].scales<=0.2){
+
+                        array[i].scales = 0.2
+
+                    }
+                }
+
+            },60)
+
+            setInterval(function () {
+
+                var obj = {angle:0,num:150,scales:1,color:"rgb("+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+","+parseInt(Math.random()*255)+")"}
+                array.push(obj)
+
+            },1000)
+        }
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="600" height="600">
+</canvas>
+</body>
+</html>
