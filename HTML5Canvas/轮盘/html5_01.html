@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        canvas{
+            background: aliceblue;
+
+        }
+        input{
+
+            width: 500px;
+            height: 40px;
+            background: greenyellow;
+            color: white;
+            font-size: large;
+
+        }
+    </style>
+    <script>
+
+        window.onload = function () {
+
+            var myCanvas = document.getElementById("myCanvas")
+            var context = myCanvas.getContext("2d")
+
+            context.translate(250,250)
+
+            //扇形颜色
+            var arrayColor = ["#FF0","#252334","blue","gray","green","#00E0EE","#F0E0EE","#888"]
+            //文字
+            var arrayText = ["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖"]
+
+            createPan(context,0,arrayColor,arrayText)
+
+
+        }
+
+        function chouJiang(){
+
+            var myCanvas = document.getElementById("myCanvas")
+            var context = myCanvas.getContext("2d")
+
+            //扇形颜色
+            var arrayColor = ["#FF0","#252334","blue","gray","green","#00E0EE","#F0E0EE","#888"]
+            //文字
+            var arrayText = ["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖"]
+
+            var step = 10+10*Math.random()
+            var jd = 0
+
+            var t = setInterval(function () {
+
+                if(step<=0.2){
+
+                    clearInterval(t)
+
+                    var sn = Math.ceil(jd/45)
+                    var text = arrayText[arrayText.length - sn]
+
+                    context.font = "15px 微软雅黑"
+                    context.textAlign = "center"
+                    context.fillStyle = "red"
+                    var str = "恭喜获得 " + text
+                    context.fillText(str,0,5)
+
+
+                }else{
+
+                    if(jd>360){
+                        jd = 0
+                    }
+
+                    step*= 0.97
+
+                    jd+=step
+
+                    createPan(context,jd,arrayColor,arrayText)
+                }
+
+            },60)
+
+        }
+
+        function createPan(context,jd,arrayColor,arrayText){
+
+            context.clearRect(-200,-200,500,500)
+            context.moveTo(160,0)
+            context.lineTo(190,0)
+            context.lineWidth = 8
+            context.stroke()
+            context.lineWidth = 1
+
+            context.save()
+            context.rotate(jd*Math.PI/180)
+
+            //绘制扇形
+            for(var i=0;i<8;i++){
+
+                context.beginPath()
+                context.moveTo(0,0)
+                context.fillStyle  = arrayColor[i]
+                context.arc(0,0,150,i*45*Math.PI/180,(i+1)*45*Math.PI/180,false)
+                context.closePath()
+                context.fill()
+            }
+
+            //绘制白盘
+            context.beginPath()
+            context.arc(0,0,60,0,2*Math.PI)
+            context.fillStyle = "white"
+            context.fill()
+
+            //添加文字
+            for(var i=0;i<8;i++){
+
+                context.save()
+                context.beginPath()
+                context.fillStyle = "#FF0000"
+                context.font = "16px 微软雅黑"
+                context.rotate((i*45+25)*Math.PI/180)
+                context.fillText(arrayText[i],70,0)
+                context.restore()
+            }
+            context.restore()
+        }
+
+    </script>
+</head>
+<body>
+<input type="button" value="抽奖" onclick="chouJiang()"><br>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+</body>
+</html>
