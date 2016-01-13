@@ -12,5 +12,8 @@
 
   ![](https://raw.githubusercontent.com/AlbertXYZ/HTML5/master/Images/wht.gif) 
   
+转盘
+
+  ![](https://raw.githubusercontent.com/AlbertXYZ/HTML5/master/Images/ZP.gif) 
 
 
