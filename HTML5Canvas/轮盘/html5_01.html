@@ -13,40 +13,32 @@
             width: 500px;
             height: 40px;
             background: greenyellow;
-            color: white;
+            color: red;
             font-size: large;
 
         }
     </style>
     <script>
 
+        //扇形颜色
+        var arrayColor = ["#FF0","#252334","blue","gray","green","#00E0EE","#F0E0EE","#888"]
+        //文字
+        var arrayText = ["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖"]
+
+        var myCanvas
+        var context
+
         window.onload = function () {
 
-            var myCanvas = document.getElementById("myCanvas")
-            var context = myCanvas.getContext("2d")
-
+            myCanvas = document.getElementById("myCanvas")
+            context = myCanvas.getContext("2d")
             context.translate(250,250)
-
-            //扇形颜色
-            var arrayColor = ["#FF0","#252334","blue","gray","green","#00E0EE","#F0E0EE","#888"]
-            //文字
-            var arrayText = ["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖"]
-
-            createPan(context,0,arrayColor,arrayText)
-
-
+            createPan(0,arrayColor,arrayText)
         }
 
         function chouJiang(){
 
-            var myCanvas = document.getElementById("myCanvas")
-            var context = myCanvas.getContext("2d")
-
-            //扇形颜色
-            var arrayColor = ["#FF0","#252334","blue","gray","green","#00E0EE","#F0E0EE","#888"]
-            //文字
-            var arrayText = ["一等奖","二等奖","三等奖","四等奖","五等奖","六等奖","七等奖","八等奖"]
-
+            //获取随机数10-20之间 使得转盘每次转到不同的扇形区域
             var step = 10+10*Math.random()
             var jd = 0
 
@@ -54,9 +46,13 @@
 
                 if(step<=0.2){
 
+                    //清除定时器 转盘停止转动
                     clearInterval(t)
 
+                    //获取扇形区域内的文本
                     var sn = Math.ceil(jd/45)
+
+                    //顺时针旋转 所以取对称下标数组文本
                     var text = arrayText[arrayText.length - sn]
 
                     context.font = "15px 微软雅黑"
@@ -76,14 +72,15 @@
 
                     jd+=step
 
-                    createPan(context,jd,arrayColor,arrayText)
+                    createPan(jd,arrayColor,arrayText)
                 }
 
             },60)
 
         }
 
-        function createPan(context,jd,arrayColor,arrayText){
+        //创建转盘
+        function createPan(jd,arrayColor,arrayText){
 
             context.clearRect(-200,-200,500,500)
             context.moveTo(160,0)
