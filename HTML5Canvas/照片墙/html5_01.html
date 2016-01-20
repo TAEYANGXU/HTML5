@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>照片墙</title>
+    <style>
+        canvas {
+
+            background:#eee;
+        }
+    </style>
+    <script>
+
+        window.onload = function () {
+
+            var myCanvas = document.getElementById("myCanvas");
+            var context = myCanvas.getContext("2d");
+            var img = document.getElementsByTagName("img")[0];
+
+            //速度
+            var vx = 0;
+            var vy = 0;
+            //运动目标位置
+            var targetx = 250;
+            var targety = 150;
+            //开始位置
+            var startx = 250;
+            var starty = -100;
+            //变化值
+            var changex = startx;
+            var changey = starty;
+            //弹性系数
+            var spring = 0.8;
+            //摩擦力
+            var friction = 0.6;
+
+            setInterval(function () {
+
+                context.clearRect(0,0,500,500);
+                context.beginPath();
+                context.lineWidth = 5;
+                context.moveTo(startx,starty);
+                vx+=(targetx - changex)*spring;
+                vy+=(targety - changey)*spring;
+                changex+=(vx *= friction);
+                changey+=(vy *= friction);
+                context.lineTo(changex,changey)
+
+                context.stroke();
+
+                context.drawImage(img,changex-100,changey,200,200);
+
+            },60)
+        }
+
+    </script>
+
+
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+<img src="图片/12.jpg" hidden>
+</body>
+</html>
