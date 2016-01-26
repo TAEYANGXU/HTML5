@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闪烁的星星</title>
+    <style>
+        canvas{
+
+            background: aliceblue;
+
+        }
+    </style>
+    <script>
+
+        window.onload = function () {
+
+            var canvas = document.getElementById("myCanvas")
+            var context = canvas.getContext("2d")
+
+            var starArray = []
+
+            for (var i=0;i<50;i++){
+
+                var starObj = {
+
+                    radius1:20+10*Math.random(),radius2:8+7*Math.random(),
+                    x:30+(canvas.width-60)*Math.random(),y:30+(canvas.height-60)*Math.random(),
+                    num:Math.ceil(4+4*Math.random()),
+                    color:"rgb("+parseInt(255*Math.random())+","+parseInt(255*Math.random())+","+parseInt(255*Math.random())+")",
+                    angle:360*Math.random(),changeAngle:-5+10*Math.random(),
+
+                }
+
+                starArray.push(starObj)
+
+            }
+
+
+            setInterval(function () {
+
+                context.clearRect(0,0,500,500)
+
+                for (var i=0;i<starArray.length;i++){
+
+                    starArray[i].angle+=starArray[i].changeAngle;
+
+                    context.save();
+                    context.beginPath();
+                    context.translate(starArray[i].x,starArray[i].y);
+                    context.rotate(starArray[i].angle*Math.PI/180);
+                    context.scale(Math.sin(starArray[i].angle*Math.PI/180),Math.sin(starArray[i].angle*Math.PI/180))
+                    context.globalAlpha=Math.abs(Math.sin(starArray[i].angle*Math.PI/180));
+
+                    drawStar(0,0,starArray[i].radius1,starArray[i].radius2,5,starArray[i].color)
+                    context.restore()
+
+                }
+
+
+            },60)
+
+
+
+            function drawStar(x,y,radius,radius2,num,color){
+
+                var angle = 360/(num*2)
+                var array = []
+
+                for(var i=0;i<num*2;i++){
+
+                    var star = {}
+                    if(i%2==0){
+
+                        star.x = x+radius*Math.cos(i*angle*Math.PI/180)
+                        star.y = y+radius*Math.sin(i*angle*Math.PI/180)
+                    }else{
+
+                        star.x = x+radius2*Math.cos(i*angle*Math.PI/180)
+                        star.y = y+radius2*Math.sin(i*angle*Math.PI/180)
+                    }
+
+                    array.push(star)
+
+
+                }
+
+                context.beginPath()
+                context.fillStyle = color
+                context.moveTo(array[0].x,array[0].y)
+
+                for(var i=0;i<array.length;i++){
+
+                    context.lineTo(array[i].x,array[i].y)
+
+                }
+
+                context.closePath()
+                context.fill()
+            }
+        }
+
+    </script>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500">
+</canvas>
+</body>
+</html>
